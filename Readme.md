@@ -11,12 +11,15 @@ npm init
 
 npm install --save typescript
 
-# 如果先安装了 react，然后安装typescript， 还需要手动安装@types/react
-npm install react react-dom  
+# 安装typescript后， 还需要手动安装@types/react, @types/react-dom
+npm install react react-dom --save
+npm install @types/react @types/react-dom --save
+
+npm install react-router react-router-dom --save
 
 # 安装webpack
 npm install webpack webpack-cli --save-dev
-npm install webpack-dev-server
+npm install webpack-dev-server --save-dev
 
 # 安装 bebel
 npm install --save-dev @babel/core @babel/cli @babel/preset-env
