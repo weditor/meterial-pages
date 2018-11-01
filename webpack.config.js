@@ -11,7 +11,7 @@ module.exports = {
     rules: [
         { test: /\.jsx?$/, exclude: /node_modules/, loader: "babel-loader" },
         { test: /\.tsx?$/, exclude: /node_modules/, loaders: ["babel-loader", "ts-loader"] },
-        { test: /\.css$/, exclude: /node_modules/, loaders: ["style-loader", "css-loader"] },
+        { test: /\.css$/, loaders: ["style-loader", "css-loader"] },
     ]
   },
   devServer: {

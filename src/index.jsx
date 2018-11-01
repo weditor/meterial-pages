@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import ArticleIndex from "./articles/index.jsx";
+
 
 const styles = {
     root: {
@@ -24,23 +26,32 @@ const styles = {
     }
 };
 
-function ButtonAppBar(props) {
-    const { classes } = props;
-    return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="title" color="inherit" className={classes.flex}>
-                        News
-                    </Typography>
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+class ButtonAppBar extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    enterApp(name) {
+        this.props.history.push(name);
+    }
+
+    render() {
+        const { classes } = this.props;
+        return (
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography variant="title" color="inherit" className={classes.flex}>
+                            News
+                            <Button color="inherit">Blog</Button>
+                        </Typography>
+                        <Button color="inherit" onClick={()=>this.enterApp("/topics")}>topics</Button>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
 }
 
 ButtonAppBar.propTypes = {
@@ -52,22 +63,9 @@ let MyAppBar = withStyles(styles)(ButtonAppBar);
 const BasicExample = () => (
     <Router>
         <div>
-            <MyAppBar />
-            <ul>
-                <li>
-                    <Link to="/">Home</Link>
-                </li>
-                <li>
-                    <a href="/about">About</a>
-                </li>
-                <li>
-                    <Link to="/topics">Topics</Link>
-                </li>
-            </ul>
-
-            <hr />
-
-            <Route exact path="/" component={Home} />
+            <Route path="/" component={MyAppBar} />
+            <Route exact path="/" component={ArticleIndex} />
+            <Route path="/blog" component={ArticleIndex} />
             <Route path="/about" component={About} />
             <Route path="/topics" component={Topics} />
         </div>
@@ -75,9 +73,8 @@ const BasicExample = () => (
 );
 
 const Home = () => (
-    <div>
-        <h2>Home</h2>
-    </div>
+    // <MarkdownShortcuts />
+    <ArticleIndex />
 );
 
 const About = () => (
@@ -112,6 +109,4 @@ const Topic = ({ match }) => (
     </div>
 );
 
-//   export default BasicExample;
 ReactDOM.render(<BasicExample />, document.getElementById("root"));
-// ReactDOM.render(<BasicExample />, document.getElementById("root"))
