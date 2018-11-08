@@ -2,12 +2,12 @@ import React from 'react'
 import CodeMirror from 'codemirror'
 
 import './codemirror.css'
-import 'codemirror/lib/codemirror.css'
+// import 'codemirror/lib/codemirror.css'
 import 'codemirror/addon/mode/loadmode'
 // import '../../node_modules/codemirror/mode/meta.js'
 // require('codemirror/lib/codemirror.css')
 // require('codemirror/addon/mode/loadmode.js')
-require('codemirror/mode/javascript/javascript.js')
+// require('codemirror/mode/javascript/javascript.js')
 
 
 CodeMirror.modeURL = 'codemirror/mode/%N/%N.js'
@@ -17,20 +17,23 @@ class MirrorEditor extends React.Component {
         super(props)
     }
 
+    change(cm, changeObj) {
+        if (!this.props.onChange) {
+            return;
+        }
+        this.props.onChange(cm.getDoc().getValue());
+    }
+
     componentDidMount() {
         this.editor = CodeMirror.fromTextArea(this.dom, {
-            mode: "javascript"
+            // mode: "javascript"
         });
-        this.editor.setOption('mode', "text/javascript");
-        CodeMirror.autoLoadMode(this.editor, "javascript")
-        // this.editor = CodeMirror(this.dom, {
-        //     value: "function myScript(){return 100;}\n",
-        //     mode:  "javascript"
-        //   });
+        // this.editor.setOption('mode', "text/javascript");
+        // CodeMirror.autoLoadMode(this.editor, "javascript")
+        CodeMirror.on(this.editor, "change", (cm, changeObj) => this.change(cm, changeObj));
     }
 
     onBuild(ref) {
-        console.log(ref);
         this.dom = ref;
     }
 

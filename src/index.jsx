@@ -11,6 +11,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArticleIndex from "./articles/index.jsx";
+import ApiManager from "./ApiManager.jsx";
+import { withProps } from "./lib.jsx"
 
 
 const styles = {
@@ -35,6 +37,20 @@ class ButtonAppBar extends React.Component {
         this.props.history.push(name);
     }
 
+    goLoginPage() {
+        this.props.history.push("/api_auth/login/");
+    }
+
+    renderAccount() {
+        console.log(this.props.api)
+        if (!this.props.api.is_authenticated()) {
+            return <Button color="inherit" onClick={this.goLoginPage}>Login</Button>
+        }
+        else {
+            return <Button color="inherit">{this.props.api.username()}</Button>
+        }
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -43,10 +59,10 @@ class ButtonAppBar extends React.Component {
                     <Toolbar>
                         <Typography variant="title" color="inherit" className={classes.flex}>
                             News
-                            <Button color="inherit">Blog</Button>
+                            <Button color="inherit" onClick={()=>this.enterApp("/blog")}>Blog</Button>
                         </Typography>
                         <Button color="inherit" onClick={()=>this.enterApp("/topics")}>topics</Button>
-                        <Button color="inherit">Login</Button>
+                        {this.renderAccount()}
                     </Toolbar>
                 </AppBar>
             </div>
@@ -60,22 +76,25 @@ ButtonAppBar.propTypes = {
 
 let MyAppBar = withStyles(styles)(ButtonAppBar);
 
-const BasicExample = () => (
-    <Router>
-        <div>
-            <Route path="/" component={MyAppBar} />
-            <Route exact path="/" component={ArticleIndex} />
-            <Route path="/blog" component={ArticleIndex} />
-            <Route path="/about" component={About} />
-            <Route path="/topics" component={Topics} />
-        </div>
-    </Router>
-);
+class BasicExample extends React.Component {
+    apiManager = new ApiManager();
 
-const Home = () => (
-    // <MarkdownShortcuts />
-    <ArticleIndex />
-);
+    render() {
+        let comProps = withProps({ api: this.apiManager });
+        return (
+            <Router>
+                <div>
+                    {/* <Route path="/" component={(...props) => (<MyAppBar api={this.apiManager} {...props} />)} /> */}
+                    <Route path="/" component={comProps(MyAppBar)} />
+                    <Route exact path="/" component={Topics} />
+                    <Route path="/blog" component={comProps(ArticleIndex)} />
+                    <Route path="/about" component={About} />
+                    <Route path="/topics" component={Topics} />
+                </div>
+            </Router>
+        );
+    }
+}
 
 const About = () => (
     <div>
