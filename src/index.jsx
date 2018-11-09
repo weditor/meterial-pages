@@ -9,7 +9,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import MenuIcon from "@material-ui/icons/Menu";
+import Calendar from "react-calendar"
+
 import ArticleIndex from "./articles/index.jsx";
 import ApiManager from "./ApiManager.jsx";
 import { withProps } from "./lib.jsx"
@@ -25,6 +29,9 @@ const styles = {
     menuButton: {
         marginLeft: -12,
         marginRight: 20
+    },
+    content: {
+        padding: "5px",
     }
 };
 
@@ -76,19 +83,36 @@ ButtonAppBar.propTypes = {
 
 let MyAppBar = withStyles(styles)(ButtonAppBar);
 
+
 class BasicExample extends React.Component {
     apiManager = new ApiManager();
 
     render() {
         let comProps = withProps({ api: this.apiManager });
+        const { classes } = this.props;
         return (
             <Router>
                 <div>
                     <Route path="/" component={comProps(MyAppBar)} />
-                    <Route exact path="/" component={Topics} />
-                    <Route path="/blog" component={comProps(ArticleIndex)} />
-                    <Route path="/about" component={About} />
-                    <Route path="/topics" component={Topics} />
+                    <Grid container spacing={24}>
+                        <Grid item sm={3}>
+                            <Paper className={classes.content}>
+                                <Calendar
+                                // onChange={this.onChange}
+                                value={new Date()}
+                                />
+                            </Paper>
+                        </Grid>
+                        <Grid item sm={9}>
+                            <Paper className={classes.content}>
+                                
+                                <Route exact path="/" component={Topics} />
+                                <Route path="/blog" component={comProps(ArticleIndex)} />
+                                <Route path="/about" component={About} />
+                                <Route path="/topics" component={Topics} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </div>
             </Router>
         );
@@ -127,4 +151,7 @@ const Topic = ({ match }) => (
     </div>
 );
 
-ReactDOM.render(<BasicExample />, document.getElementById("root"));
+
+const MyBasicExample = withStyles(styles)(BasicExample);
+
+ReactDOM.render(<MyBasicExample />, document.getElementById("root"));

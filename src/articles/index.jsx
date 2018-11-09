@@ -28,12 +28,14 @@ class ArticleIndex extends React.Component {
         }
 
         return (
-            <Paper className={classes.content}>
+            // <Paper className={classes.content}>
+            <div>
                 <Route exact path={match.url} component={comProps(ArticleList)} />
                 <Route exact path={`${url_prefix}/edit`} component={comProps(EditArticle)} />
                 <Route path={`${url_prefix}/edit/:blog_id`} component={comProps(EditArticle)} />
                 <Route path={`${url_prefix}/view/:blog_id`} component={comProps(ViewArticle)} />
-            </Paper>
+            </div>
+            // </Paper>
         )
     }
 }
