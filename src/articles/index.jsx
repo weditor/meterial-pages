@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import {BrowserRouter, Route} from 'react-router-dom'
 import ArticleList from './list.jsx'
 import EditArticle from './editArticle.jsx'
+import ViewArticle from './view.jsx'
 import { withProps } from "../lib.jsx"
 
 
@@ -21,15 +22,17 @@ class ArticleIndex extends React.Component {
     render() {
         const { match, history, classes } = this.props;
         const comProps = withProps({api: this.props.api})
-        let edit_url = `${match.url}/edit`;
-        if (match.url.endsWith("/")) {
-            edit_url = `${match.url}edit`;
+        let url_prefix = match.url;
+        if (url_prefix.endsWith("/")) {
+            url_prefix = url_prefix.substring(0, url_prefix.length-1);
         }
 
         return (
             <Paper className={classes.content}>
                 <Route exact path={match.url} component={comProps(ArticleList)} />
-                <Route path={edit_url} component={comProps(EditArticle)} />
+                <Route exact path={`${url_prefix}/edit`} component={comProps(EditArticle)} />
+                <Route path={`${url_prefix}/edit/:blog_id`} component={comProps(EditArticle)} />
+                <Route path={`${url_prefix}/view/:blog_id`} component={comProps(ViewArticle)} />
             </Paper>
         )
     }

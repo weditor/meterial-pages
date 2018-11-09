@@ -14,9 +14,17 @@ CodeMirror.modeURL = 'codemirror/mode/%N/%N.js'
 
 class MirrorEditor extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
     }
 
+    componentWillReceiveProps(props) {
+        if (this.props != props) {
+            if (this.editor) {
+                this.editor.getDoc().setValue(props.value);
+            }
+        }
+    }
+    
     change(cm, changeObj) {
         if (!this.props.onChange) {
             return;
@@ -27,6 +35,7 @@ class MirrorEditor extends React.Component {
     componentDidMount() {
         this.editor = CodeMirror.fromTextArea(this.dom, {
             // mode: "javascript"
+            value: this.props.value,
         });
         // this.editor.setOption('mode', "text/javascript");
         // CodeMirror.autoLoadMode(this.editor, "javascript")

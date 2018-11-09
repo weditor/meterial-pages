@@ -58,8 +58,8 @@ class ButtonAppBar extends React.Component {
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="title" color="inherit" className={classes.flex}>
-                            News
-                            <Button color="inherit" onClick={()=>this.enterApp("/blog")}>Blog</Button>
+                            Swan
+                            <Button color="inherit" onClick={()=>this.enterApp("/blog")}>博客</Button>
                         </Typography>
                         <Button color="inherit" onClick={()=>this.enterApp("/topics")}>topics</Button>
                         {this.renderAccount()}
@@ -84,7 +84,6 @@ class BasicExample extends React.Component {
         return (
             <Router>
                 <div>
-                    {/* <Route path="/" component={(...props) => (<MyAppBar api={this.apiManager} {...props} />)} /> */}
                     <Route path="/" component={comProps(MyAppBar)} />
                     <Route exact path="/" component={Topics} />
                     <Route path="/blog" component={comProps(ArticleIndex)} />

@@ -1,0 +1,13 @@
+
+#article-title:hover .edit_btn_wrapper{
+    display: inline;
+}
+
+#article-title .edit_btn_wrapper{
+    display: none;
+}
+
+/* #article-title {
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+} */

@@ -9,10 +9,6 @@ import SendIcon from "@material-ui/icons/Send";
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
-    // content: {
-    //     margin: theme.spacing.unit * 2,
-    //     padding: theme.spacing.unit * 2
-    // },
     headerInput: {
         marginBottom: theme.spacing.unit ,
         fontSize: "x-large",
@@ -32,12 +28,36 @@ class EditArticle extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.loadArticle()
+    }
+
+    loadArticle() {
+        if (!this.blogId()) {
+            return;
+        }
+        this.props.api.getBlog(this.blogId()).then(js=>this.setState({title: js.title, content: js.content}))
+    }
+
+    blogId() {
+        return this.props.match.params.blog_id;
+    }
+
     saveArticle() {
-        this.props.api.addBlog(this.state.title, this.content)
-            .then(js => {
-                console.log(js);
-                this.setState({ title: js.title, content: js.content });
-            })
+        if (!this.blogId()) {
+            this.props.api.addBlog(this.state.title, this.content)
+                .then(js => {
+                    console.log(js);
+                    this.setState({ title: js.title, content: js.content });
+                })
+        }
+        else {
+            this.props.api.updateBlog(this.blogId(), this.state.title, this.content)
+                .then(js => {
+                    console.log(js);
+                    this.setState({ title: js.title, content: js.content });
+                })
+        }
     }
 
     onChange(value) {
@@ -46,6 +66,7 @@ class EditArticle extends React.Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state.content)
         return (
             <div>
                 <TextField fullWidth label="标题"
@@ -54,7 +75,7 @@ class EditArticle extends React.Component {
                     value={this.state.title}
                     onChange={e=>this.setState({title: e.target.value})}
                 ></TextField>
-                <MirrorEditor onChange={value=>this.onChange(value)}/>
+                <MirrorEditor value={this.state.content} onChange={value=>this.onChange(value)}/>
                 <Button variant="fab" color="primary" aria-label="保存" className={classes.button} onClick={()=>this.saveArticle()}>
                     <SendIcon />
                 </Button>
