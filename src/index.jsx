@@ -94,16 +94,15 @@ class BasicExample extends React.Component {
             <Router>
                 <div>
                     <Route path="/" component={comProps(MyAppBar)} />
-                    <Grid container spacing={24}>
+                    {/* <Grid container spacing={24}>
                         <Grid item sm={3}>
                             <Paper className={classes.content}>
                                 <Calendar
-                                // onChange={this.onChange}
                                 value={new Date()}
                                 />
                             </Paper>
                         </Grid>
-                        <Grid item sm={9}>
+                        <Grid item sm={9}> */}
                             <Paper className={classes.content}>
                                 
                                 <Route exact path="/" component={Topics} />
@@ -111,8 +110,8 @@ class BasicExample extends React.Component {
                                 <Route path="/about" component={About} />
                                 <Route path="/topics" component={Topics} />
                             </Paper>
-                        </Grid>
-                    </Grid>
+                        {/* </Grid>
+                    </Grid> */}
                 </div>
             </Router>
         );

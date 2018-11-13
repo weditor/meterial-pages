@@ -10,11 +10,14 @@ import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     headerInput: {
-        marginBottom: theme.spacing.unit ,
+        marginBottom: theme.spacing.unit,
         fontSize: "x-large",
     },
     button: {
         margin: theme.spacing.unit,
+    },
+    backButton: {
+        float: "right",
     }
 })
 
@@ -69,13 +72,17 @@ class EditArticle extends React.Component {
         console.log(this.state.content)
         return (
             <div>
+                <Button className={classes.backButton} variant="outlined" size="small" color="inherit"
+                    onClick={() => this.props.history.goBack()} >返回</Button>
                 <TextField fullWidth label="标题"
                     className={classes.headerInput}
                     InputProps={{ className: classes.headerInput }}
                     value={this.state.title}
                     onChange={e=>this.setState({title: e.target.value})}
                 ></TextField>
-                <MirrorEditor value={this.state.content} onChange={value=>this.onChange(value)}/>
+                <MirrorEditor value={this.state.content} onChange={value => this.onChange(value)} />
+                <TextField label="是否私密"></TextField>
+                <TextField label="标签"></TextField>
                 <Button variant="fab" color="primary" aria-label="保存" className={classes.button} onClick={()=>this.saveArticle()}>
                     <SendIcon />
                 </Button>

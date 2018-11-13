@@ -37,8 +37,6 @@ class ViewArticle extends React.Component {
             showEdit: false,
         };
         this.md = MarkdownIt();
-        // this.url_prefix = this.props.match.url.endsWith("/")
-        // "".replace()
     }
 
     blogId() {
@@ -64,7 +62,11 @@ class ViewArticle extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+                
                 <h1 id="article-title">
+                    <Button variant="outlined" size="small" color="inherit"
+                        onClick={() => this.props.history.push('/blog')}
+                    >返回</Button>
                     <span>{this.state.title}</span>
                     <span className="edit_btn_wrapper">
                         <IconButton onClick={()=>this.editArticle()} className={classes.editBtn} color="primary">
@@ -72,6 +74,7 @@ class ViewArticle extends React.Component {
                         </IconButton>
                     </span>
                 </h1>
+                
                 <Divider light />
                 <div
                     ref={dom => this.mdBuilded(dom)}
