@@ -11,6 +11,7 @@ import SendIcon from "@material-ui/icons/Send";
 import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MarkdownIt from "markdown-it";
 import "./view.css"
 
@@ -23,8 +24,12 @@ const styles = theme => ({
     },
     editBtn: {
         // paddingTop: "5px",
-        padding: "7px",
+        padding: "6px",
         margin: "0px"
+    },
+    backButton: {
+        fontSize: "small",
+        marginRight: "10px",
     }
 });
 
@@ -63,10 +68,12 @@ class ViewArticle extends React.Component {
         return (
             <div>
                 
+                <Button className={classes.backButton} variant="contained" size="small" color="primary" 
+                    onClick={() => this.props.history.push('/blog')} >
+                    <ArrowBackIcon fontSize="small"/>
+                    返回
+                </Button>
                 <h1 id="article-title">
-                    <Button variant="outlined" size="small" color="inherit"
-                        onClick={() => this.props.history.push('/blog')}
-                    >返回</Button>
                     <span>{this.state.title}</span>
                     <span className="edit_btn_wrapper">
                         <IconButton onClick={()=>this.editArticle()} className={classes.editBtn} color="primary">

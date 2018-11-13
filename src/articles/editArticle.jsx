@@ -6,7 +6,9 @@ import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField';
 import SaveIcon from "@material-ui/icons/Save";
 import SendIcon from "@material-ui/icons/Send";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
     headerInput: {
@@ -17,7 +19,8 @@ const styles = theme => ({
         margin: theme.spacing.unit,
     },
     backButton: {
-        float: "right",
+        fontSize: "small",
+        marginBottom: "10px",
     }
 })
 
@@ -32,6 +35,13 @@ class EditArticle extends React.Component {
     }
 
     componentDidMount() {
+        if (!this.blogId()) {
+            document.title = "新建博客";
+        }
+        else {
+            document.title = "编辑博客";
+        }
+        
         this.loadArticle()
     }
 
@@ -72,8 +82,11 @@ class EditArticle extends React.Component {
         console.log(this.state.content)
         return (
             <div>
-                <Button className={classes.backButton} variant="outlined" size="small" color="inherit"
-                    onClick={() => this.props.history.goBack()} >返回</Button>
+                <Button className={classes.backButton} variant="contained" size="small" color="primary" 
+                    onClick={() => this.props.history.goBack()} >
+                    <ArrowBackIcon fontSize="small"/>
+                    返回
+                </Button>
                 <TextField fullWidth label="标题"
                     className={classes.headerInput}
                     InputProps={{ className: classes.headerInput }}
