@@ -9,9 +9,11 @@ class ApiManager {
             'login': '/api_auth/login/',
             'logout': '/api_auth/logout/',
             "blog": '/api/blog/article/',
+            "tag": '/api/blog/tag/',
         }
         this.account = null;
         this.get_profile();
+        console.log(this.account)
     }
 
     get(url) {
@@ -38,12 +40,14 @@ class ApiManager {
         }).then(req => req.json());
     }
 
-    get_profile() {
-        fetch('/account/profile/').then(req => req.json()).then(js => { this.account = js });;
+    async get_profile() {
+        // await (() => fetch('/account/profile/').then(req => req.json()).then(js => { this.account = js }))();
+        this.account = await (() => fetch('/account/profile/').then(req => req.json()))();
+        // console.log(this.account)
     }
 
     is_authenticated() {
-        console.log(this.account)
+        // console.log(this.account)
         return Boolean(this.account && this.account.is_authenticated);
     }
 
@@ -62,12 +66,28 @@ class ApiManager {
         return this.getJson(`${this.urls.blog}/${blog_id}/`);
     }
 
-    addBlog(title, content) {
-        return this.send(this.urls.blog, "POST", {title: title, content: content})
+    addBlog(title, content, is_private) {
+        return this.send(this.urls.blog, "POST", {title: title, content: content, is_private: is_private})
     }
 
-    updateBlog(blog_id, title, content) {
-        return this.send(`${this.urls.blog}/${blog_id}/`, "PUT", {title: title, content: content})
+    updateBlog(blog_id, title, content, is_private) {
+        return this.send(`${this.urls.blog}/${blog_id}/`, "PUT", {title: title, content: content, is_private: is_private})
+    }
+
+    listTag(name, page, offset) {
+        return this.getJson(this.urls.tag+`?search=${name}`);
+    }
+
+    getTag(tag_id) {
+        return this.getJson(`${this.urls.tag}/${tag_id}/`);
+    }
+
+    addTag(name, is_private) {
+        return this.send(this.urls.tag, "POST", {name: name, is_private: is_private})
+    }
+
+    updateTag(tag_id, name, is_private) {
+        return this.send(`${this.urls.tag}/${tag_id}/`, "PUT", {name: name, is_private: is_private})
     }
 }
 

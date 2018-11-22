@@ -49,9 +49,10 @@ class ButtonAppBar extends React.Component {
     }
 
     renderAccount() {
-        console.log(this.props.api)
+        // console.log(this.props.api)
+        // console.log(this.props.api.is_authenticated())
         if (!this.props.api.is_authenticated()) {
-            return <Button color="inherit" onClick={this.goLoginPage}>Login</Button>
+            return <Button color="inherit" onClick={()=>this.goLoginPage()}>Login</Button>
         }
         else {
             return <Button color="inherit">{this.props.api.username()}</Button>
@@ -60,6 +61,8 @@ class ButtonAppBar extends React.Component {
 
     render() {
         const { classes } = this.props;
+        console.log("render app bar")
+        console.log(this.props.api.account)
         return (
             <div className={classes.root}>
                 <AppBar position="static">
@@ -88,6 +91,7 @@ class BasicExample extends React.Component {
     apiManager = new ApiManager();
 
     render() {
+        console.log(this.apiManager.account)
         let comProps = withProps({ api: this.apiManager });
         const { classes } = this.props;
         return (

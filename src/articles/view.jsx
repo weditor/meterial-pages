@@ -51,7 +51,7 @@ class ViewArticle extends React.Component {
     componentDidMount() {
         this.props.api.getBlog(this.blogId()).then(js => {
             console.log(js);
-            this.setState({ title: js.title, content: js.content });
+            this.setState({ title: js.title, content: js.content, is_private: js.is_private });
         });
     }
 
@@ -67,7 +67,6 @@ class ViewArticle extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                
                 <Button className={classes.backButton} variant="contained" size="small" color="primary" 
                     onClick={() => this.props.history.push('/blog')} >
                     <ArrowBackIcon fontSize="small"/>
@@ -75,11 +74,13 @@ class ViewArticle extends React.Component {
                 </Button>
                 <h1 id="article-title">
                     <span>{this.state.title}</span>
-                    <span className="edit_btn_wrapper">
-                        <IconButton onClick={()=>this.editArticle()} className={classes.editBtn} color="primary">
-                            <EditIcon fontSize="small"/>
-                        </IconButton>
-                    </span>
+                    {this.props.api.is_authenticated() &&
+                        <span className="edit_btn_wrapper">
+                            <IconButton onClick={() => this.editArticle()} className={classes.editBtn} color="primary">
+                                <EditIcon fontSize="small" />
+                            </IconButton>
+                        </span>
+                    }
                 </h1>
                 
                 <Divider light />
