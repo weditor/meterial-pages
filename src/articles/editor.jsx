@@ -30,6 +30,8 @@ class MirrorEditor extends React.Component {
     componentDidMount() {
         this.editor = CodeMirror.fromTextArea(this.dom, {
             value: this.props.value,
+            lineNumbers: true,
+            lineWrapping: true
         });
         CodeMirror.on(this.editor, "change", (cm, changeObj) => this.change(cm, changeObj));
     }

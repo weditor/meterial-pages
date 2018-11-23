@@ -109,7 +109,7 @@ class EnhancedTable extends React.Component {
                         <TableHead>
                             <TableRow>
                                 {rows.map(row => {
-                                    return <TableCell key={row.id} />;
+                                    return <TableCell key={row.id}>{row.label}</TableCell>;
                                 }, this)}
                             </TableRow>
                         </TableHead>

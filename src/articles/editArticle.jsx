@@ -15,6 +15,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Divider } from "@material-ui/core";
+// import TagSlector from "./tag.jsx"
 import TagSlector from "./tag.jsx"
 
 
@@ -94,7 +95,7 @@ class EditArticle extends React.Component {
 
     render() {
         const { classes, theme  } = this.props;
-        console.log(this.state.content)
+        // console.log(this.state.content)
         const selectStyles = {
             input: base => ({
               ...base,
