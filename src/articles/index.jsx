@@ -31,9 +31,9 @@ class ArticleIndex extends React.Component {
             <div>
                 <Route exact path={match.url} component={comProps(ArticleList)} />
                 <Route exact path={`${url_prefix}/edit`} component={comProps(EditArticle)} />
-                {this.props.api.is_authenticated() &&
+                {/* {this.props.api.is_authenticated() && */}
                     <Route path={`${url_prefix}/edit/:blog_id`} component={comProps(EditArticle)} />
-                }
+                {/* } */}
                 <Route path={`${url_prefix}/view/:blog_id`} component={comProps(ViewArticle)} />
             </div>
         )

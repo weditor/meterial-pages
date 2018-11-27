@@ -66,12 +66,12 @@ class ApiManager {
         return this.getJson(`${this.urls.blog}/${blog_id}/`);
     }
 
-    addBlog(title, content, is_private) {
-        return this.send(this.urls.blog, "POST", {title: title, content: content, is_private: is_private})
+    addBlog(title, content, is_private, tags) {
+        return this.send(this.urls.blog, "POST", {title: title, content: content, is_private: is_private, tags: tags})
     }
 
-    updateBlog(blog_id, title, content, is_private) {
-        return this.send(`${this.urls.blog}/${blog_id}/`, "PUT", {title: title, content: content, is_private: is_private})
+    updateBlog(blog_id, title, content, is_private, tags) {
+        return this.send(`${this.urls.blog}/${blog_id}/`, "PUT", {title: title, content: content, is_private: is_private, tags: tags})
     }
 
     listTag(name, page, offset) {

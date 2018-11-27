@@ -47,6 +47,7 @@ class EditArticle extends React.Component {
             content: "",
             is_private: false,
             multi: null,
+            tags: []
         }
     }
 
@@ -58,7 +59,11 @@ class EditArticle extends React.Component {
         if (!this.blogId()) {
             return;
         }
-        this.props.api.getBlog(this.blogId()).then(js=>this.setState({title: js.title, content: js.content}))
+        this.props.api.getBlog(this.blogId()).then(js => {
+            this.setState({ title: js.title, content: js.content, tags: js.tags });
+            this.tags = js.tags;
+        })
+        
     }
 
     blogId() {
@@ -66,19 +71,19 @@ class EditArticle extends React.Component {
     }
 
     saveArticle() {
-        console.log( this.state.is_private)
+        console.log( this.tags)
         if (!this.blogId()) {
-            this.props.api.addBlog(this.state.title, this.content, this.state.is_private)
+            this.props.api.addBlog(this.state.title, this.content, this.state.is_private, this.tags.map(t=>t.name))
                 .then(js => {
                     console.log(js);
-                    this.setState({ title: js.title, content: js.content, is_private: js.is_private});
+                    this.setState({ title: js.title, content: js.content, is_private: js.is_private, tags: js.tags});
                 })
         }
         else {
-            this.props.api.updateBlog(this.blogId(), this.state.title, this.content, this.state.is_private)
+            this.props.api.updateBlog(this.blogId(), this.state.title, this.content, this.state.is_private, this.tags.map(t=>t.name))
                 .then(js => {
                     console.log(js);
-                    this.setState({ title: js.title, content: js.content, is_private: js.is_private});
+                    this.setState({ title: js.title, content: js.content, is_private: js.is_private, tags: js.tags});
                 })
         }
     }
@@ -120,7 +125,7 @@ class EditArticle extends React.Component {
                 ></TextField>
                 <MirrorEditor value={this.state.content} onChange={value => this.onChange(value)} />
                 <Divider />
-                <TagSlector api={this.props.api}/>
+                <TagSlector api={this.props.api} selected={this.state.tags} onChange={(tags)=>this.tags = tags}/>
                 <FormGroup row>
                     <Button variant="fab" color="primary" aria-label="保存" className={classes.saveButton} onClick={()=>this.saveArticle()}>
                         <SendIcon />

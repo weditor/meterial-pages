@@ -30,24 +30,6 @@ function renderInput(inputProps) {
     );
 }
 
-// function getSuggestions(value) {
-//   const inputValue = deburr(value.trim()).toLowerCase();
-//   const inputLength = inputValue.length;
-//   let count = 0;
-
-//   return inputLength === 0
-//     ? []
-//     : suggestions.filter(suggestion => {
-//         const keep =
-//           count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
-
-//         if (keep) {
-//           count += 1;
-//         }
-
-//         return keep;
-//       });
-// }
 
 class DownshiftMultiple extends React.Component {
     tag_input = "";
@@ -55,8 +37,14 @@ class DownshiftMultiple extends React.Component {
     state = {
         inputValue: "",
         selectedItem: [],
-        tags: []
+        suggestions: []
     };
+
+    componentWillReceiveProps(props) {
+        if (props != this.props) {
+            this.setState({ selectedItem: props.selected })
+        }
+    }
 
     renderSuggestion({
         suggestion,
@@ -66,20 +54,20 @@ class DownshiftMultiple extends React.Component {
         selectedItem
     }) {
         const isHighlighted = highlightedIndex === index;
-        const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
+        const isSelected = (selectedItem.map(s=>s.name) || []).indexOf(suggestion.name) > -1;
 
         return (
             <MenuItem
                 {...itemProps}
-                key={suggestion.label}
+                key={suggestion.id}
                 selected={isHighlighted}
                 component="div"
                 style={{
-                    fontWeight: isSelected ? 500 : 400
+                    fontWeight: isSelected ? 800 : 400
                 }}
                 // onClick={()=>this.addTag()}
             >
-                {suggestion.type == 2 && "新建: "}{suggestion.label}
+                {suggestion.type == 2 && "新建: "}{suggestion.name}
             </MenuItem>
         );
     }
@@ -102,19 +90,19 @@ class DownshiftMultiple extends React.Component {
         this.searchTag()
     };
 
-    handleChange1 = item => {
+    handleChange = item => {
         console.log("select")
         console.log(item)
         let { selectedItem } = this.state;
 
-        if (selectedItem.indexOf(item) === -1) {
+        if (selectedItem.map(s=>s.name).indexOf(item.name) === -1) {
             selectedItem = [...selectedItem, item];
         }
 
         this.setState({
             inputValue: "",
             selectedItem
-        });
+        }, this.onChange);
     };
 
     handleDelete = item => () => {
@@ -122,42 +110,35 @@ class DownshiftMultiple extends React.Component {
             const selectedItem = [...state.selectedItem];
             selectedItem.splice(selectedItem.indexOf(item), 1);
             return { selectedItem };
-        });
+        }, this.onChange);
     };
 
-    // handleChange = name => value => {
-    //     console.log(name);
-    //     console.log(value);
-    //     this.setState({
-    //         [name]: value
-    //     });
-    // };
+    // handleChange(item) {
+    //     // if (item.type == 2) {
+    //     //     this.props.api.addTag(item.name, false).then(tag => {
+    //     //         this.handleChange1(tag)
+    //     //     });
+    //     // } else {
+    //         this.handleChange1(item)
+    //     // }
+        
+    // }
 
-    handleChange(item) {
-        // console.log(tags);
-        if (item.type == 2) {
-            console.log("Create Tags")
-            console.log(item)
-            this.props.api.addTag(item.value, false).then(tag => {
-                this.handleChange1({value: tag.name, label: tag.name, pinyin: tag.pinyin, type: 1})
-                // this.handleChange1(js)
-            });
-        } else {
-            this.handleChange1(item)
-            // this.setState({ selected: tags });
+    onChange() {
+        if (!this.props.onChange) {
+            return;
         }
+        this.props.onChange(this.state.selectedItem);
     }
 
     suggestions() {
-        let suggestions2 = this.state.tags.map(tag=>({value: tag.name, label: tag.name, pinyin: tag.pinyin, type: 1}));
-        // console.log(suggestions2);
+        let suggestions2 = this.state.suggestions.slice();
         suggestions2.push({
-            value: this.state.inputValue,
-            label: this.state.inputValue,
+            id: "",
+            name: this.state.inputValue,
             pinyin: "",
             type: 2
         });
-        // console.log(suggestions2);
         return suggestions2;
     }
 
@@ -166,10 +147,14 @@ class DownshiftMultiple extends React.Component {
     }
 
     loadTag() {
-        // console.log(this.tag_input)
-        this.props.api
-            .listTag(this.state.inputValue, 0, 0)
-            .then(js => this.setState({ tags: js.results }));
+        if (!this.state.inputValue) {
+            this.setState({ suggestions: [] });
+        }
+        else {
+            this.props.api
+                .listTag(this.state.inputValue, 0, 0)
+                .then(js => this.setState({ suggestions: js.results }));
+        }
     }
 
     render() {
@@ -198,9 +183,9 @@ class DownshiftMultiple extends React.Component {
                             InputProps: getInputProps({
                                 startAdornment: selectedItem.map(item => (
                                     <Chip
-                                        key={item.label}
+                                        key={item.id}
                                         tabIndex={-1}
-                                        label={item.label}
+                                        label={item.name}
                                         className={classes.chip}
                                         onDelete={this.handleDelete(item)}
                                     />
